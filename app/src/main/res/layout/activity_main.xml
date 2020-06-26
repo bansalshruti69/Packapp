@@ -11,6 +11,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <LinearLayout
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="It's Empty! Go on and add new items."
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
+            android:gravity="center_horizontal"
+            android:padding="16dp"/>
+
+        <TextView
+            android:padding="16dp"
+            android:gravity="center_horizontal"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Click on the + button and start adding new items."/>
+
+    </LinearLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

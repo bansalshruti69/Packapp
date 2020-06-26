@@ -35,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements android.app.Loade
             }
         });
         ListView listView = (ListView) findViewById(R.id.list_view);
+        View emptyView = findViewById(R.id.empty_view);
+        listView.setEmptyView(emptyView);
+
         adapter = new ProductCursorAdapter(this,null);
         listView.setAdapter(adapter);
         getLoaderManager().initLoader(0,null,this);

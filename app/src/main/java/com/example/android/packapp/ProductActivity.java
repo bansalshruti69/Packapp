@@ -119,8 +119,8 @@ public class ProductActivity extends AppCompatActivity {
         values.put(SUPPLIER,mSupplier.getText().toString().trim());
         values.put(QUANTITY,Integer.parseInt(mQuantity.getText().toString().trim()));
         values.put(PRICE,Integer.parseInt(mPrice.getText().toString().trim()));
-        InputStream iStream = getContentResolver().openInputStream(selectedImage);
-        byte[] inputData = getBytes(iStream);
+            InputStream iStream = getContentResolver().openInputStream(selectedImage);
+            byte[] inputData = getBytes(iStream);
         values.put(PRODUCT_IMAGE,inputData);
         //Image remaining
         Uri uri = getContentResolver().insert(CONTENT_URI,values);
