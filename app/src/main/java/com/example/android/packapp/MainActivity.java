@@ -1,14 +1,20 @@
 package com.example.android.packapp;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import static com.example.android.packapp.data.ProductContract.ProductEntry.CONTENT_URI;
@@ -40,7 +46,18 @@ public class MainActivity extends AppCompatActivity implements android.app.Loade
 
         adapter = new ProductCursorAdapter(this,null);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.v("Hey","I'm here");
+                Intent intent = new Intent(MainActivity.this,DetailActivity.class);
+                Uri uri = ContentUris.withAppendedId(CONTENT_URI,l);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        });
         getLoaderManager().initLoader(0,null,this);
+        ApplicationContextProvider applicationContextProvider = new ApplicationContextProvider();
     }
 
     @Override
@@ -66,4 +83,25 @@ public class MainActivity extends AppCompatActivity implements android.app.Loade
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
     }
+
+    public void decrement(View view){
+        int position=(Integer) view.getTag();
+        String[] projection = {
+                _ID,
+                PRODUCT_NAME,
+                PRICE,
+                QUANTITY,
+                SUPPLIER,
+                PRODUCT_IMAGE
+        };
+        Cursor cursor = getContentResolver().query(ContentUris.withAppendedId(CONTENT_URI,position),projection,null,null,null);
+        cursor.moveToFirst();
+        int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(QUANTITY));
+        if(quantity<=0)
+            return;
+        ContentValues values = new ContentValues();
+        values.put(QUANTITY,quantity-1);
+        int rowupdated = getContentResolver().update(ContentUris.withAppendedId(CONTENT_URI,position),values,null,null);
+    }
+
 }

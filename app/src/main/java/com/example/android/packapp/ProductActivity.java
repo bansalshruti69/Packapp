@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.packapp.data.ProductProvider;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -100,30 +102,54 @@ public class ProductActivity extends AppCompatActivity {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 try {
-                    saveProduct();
+                    if(saveProduct())
+                        finish();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                finish();
                 return true;
             case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(ProductActivity.this);
                 // Navigate back to parent activity (CatalogActivity)
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveProduct() throws IOException {
+    private boolean saveProduct() throws IOException {
         ContentValues values = new ContentValues();
-        values.put(PRODUCT_NAME,mProduct_Name.getText().toString().trim());
-        values.put(SUPPLIER,mSupplier.getText().toString().trim());
-        values.put(QUANTITY,Integer.parseInt(mQuantity.getText().toString().trim()));
-        values.put(PRICE,Integer.parseInt(mPrice.getText().toString().trim()));
+        String mproduct_name = mProduct_Name.getText().toString().trim();
+        if(mproduct_name.isEmpty()){
+            Toast.makeText(this,R.string.fill_the_product_name,Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        values.put(PRODUCT_NAME,mproduct_name);
+        String msupplier = mSupplier.getText().toString().trim();
+        if(msupplier.isEmpty()){
+            Toast.makeText(this,R.string.fill_the_supplier,Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        values.put(SUPPLIER,msupplier);
+        String mquantity = mQuantity.getText().toString().trim();
+        if(!mquantity.isEmpty()) {
+            int x = Integer.parseInt(mquantity);
+            if(x>=0)
+            values.put(QUANTITY, x);
+        }
+        String mprice = mPrice.getText().toString().trim();
+        if(!mquantity.isEmpty()) {
+            int x = Integer.parseInt(mprice);
+            if(x>=0)
+                values.put(PRICE, x);
+        }
+        if(selectedImage!=null) {
             InputStream iStream = getContentResolver().openInputStream(selectedImage);
             byte[] inputData = getBytes(iStream);
-        values.put(PRODUCT_IMAGE,inputData);
+            values.put(PRODUCT_IMAGE, inputData);
+        }
         //Image remaining
         Uri uri = getContentResolver().insert(CONTENT_URI,values);
+        return true;
     }
 
     public static byte[] getBytes(InputStream inputStream) throws IOException {
