@@ -17,8 +17,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProductActivity"
-            android:label="@string/add_product">
+            android:label="@string/add_product"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
+        <provider
+            android:name=".data.ProductProvider"
+            android:authorities="com.example.android.packapp"
+            android:exported="false" />
     </application>
+
 
 </manifest>
